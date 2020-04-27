@@ -32,7 +32,7 @@ function App() {
                 ) : (null);
               })
             }
-            <Redirect to='/home' />
+            <Redirect to='/login' />
           </Switch>
           <Footer />
         </React.Suspense>

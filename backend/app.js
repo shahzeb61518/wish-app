@@ -6,7 +6,7 @@ const MongoClient = require('mongodb').MongoClient;
 
 // Get routes object=> to get access to the routes
 const wishRoutes = require('./routes/wish-routes');
-const authRoutes = require('./routes/auth-routes');
+const userRoutes = require('./routes/user-routes');
 const app = express();
 
 
@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 
 app.use('/api/wish', wishRoutes);
-app.use('/api/admin', authRoutes);
+app.use('/api/user', userRoutes);
 
 app.use('*', (req, res, next) => {
   res.status(404).json({

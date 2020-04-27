@@ -35,7 +35,7 @@ export default function ButtonAppBar() {
                             color: 'white',
                         }}
                     >
-                        <Button style={{ marginLeft: '30px', fontSize: '12px' }} color="inherit">Home</Button>
+                        <Button style={{ marginLeft: '30px', fontSize: '12px' }} color="inherit">Wishes</Button>
                     </Link>
 
                     <Link
@@ -45,7 +45,7 @@ export default function ButtonAppBar() {
                             color: 'white',
                         }}
                     >
-                        <Button style={{ marginLeft: '15px', fontSize: '12px' }} color="inherit">Add Wish</Button>
+                        <Button style={{ marginLeft: '15px', fontSize: '12px' }} color="inherit">Add MyWish</Button>
                     </Link>
 
                 </Toolbar>

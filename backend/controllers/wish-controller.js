@@ -5,7 +5,7 @@ exports.addWish = (req, res, next) => {
   const wish = new Wish({
     title: req.body.title,
     description: req.body.description,
-    videoLink: req.body.videoLink,
+    image: req.body.image,
   });
   console.log("Wish data>>", wish);
   wish.save().then(createdWish => {
@@ -41,7 +41,7 @@ exports.getWish = (req, res, next) => {
 
 // // Delete Wish
 exports.deleteWish = (req, res, next) => {
-  Post.deleteOne({ _id: req.body.id }).then(
+  Wish.deleteOne({ _id: req.body.id }).then(
     result => {
       if (result.n > 0) {
         res.status(200).json({ message: "Deletion successful!" });

@@ -6,7 +6,12 @@ export default class ApiManager {
     _BASE_URL = "http://localhost:4000/api/"
     // _BASE_URL = "https://testing-app-backend.herokuapp.com/api/"
 
-    // FEEDBACK
+
+    //USERS
+    _USER_LOGIN = "user/login"
+    _USER_SIGNUP = "user/signup"
+    _USER_UPDATE = "user/update"
+    // WISH
     _ADD_WISH = "wish/add"
     _GET_WISH_LIST = "wish/get"
     _DELETE_WISH = "wish/delete"
@@ -84,18 +89,53 @@ export default class ApiManager {
         }
     }
 
+
+    //USER FUNCTIONS
+    //SingUp
+    singUp(
+        _name,
+        _email,
+        _password,
+    ) {
+        let url = this._USER_SIGNUP;
+        let userData = {
+            name: _name,
+            email: _email,
+            password: _password
+        }
+        console.log("data for adding>>>>>", userData)
+        return this.sendPostRequest(url, userData, this.headers)
+    }
+
+    //SignIn
+    signIn(
+        _email,
+        _password) {
+        let url = this._USER_LOGIN;
+
+        let userData = {
+            email: _email,
+            password: _password
+        }
+        return this.sendPostRequest(url, userData, this.headers)
+    }
+
+    //User Update
+
+
+
     // WISH FUNCTIONS
     //Adding WISH
     addWish(
         _title,
         _description,
-        _videoLink,
+        _image,
     ) {
         let url = this._ADD_WISH;
         let wishData = {
             title: _title,
             description: _description,
-            videoLink: _videoLink
+            image: _image
         }
         console.log("data for adding>>>>>", wishData)
         return this.sendPostRequest(url, wishData, this.headers)

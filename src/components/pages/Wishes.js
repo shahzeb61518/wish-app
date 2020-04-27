@@ -81,8 +81,8 @@ export default class Wishes extends Component {
                                                     Title: {item.title}
                                                 </Typography>
                                                 {
-                                                    item.videLink ?
-                                                        <div>Video is Attached</div>
+                                                    item.image ?
+                                                        <div>Image is Attached</div>
                                                         :
                                                         undefined
                                                 }
