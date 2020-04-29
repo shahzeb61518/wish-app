@@ -5,11 +5,19 @@ exports.addWish = (req, res, next) => {
   const wish = new Wish({
     title: req.body.title,
     description: req.body.description,
-    image: req.body.image,
+    userId: req.body.userId,
+    userName: req.body.userName
   });
   console.log("Wish data>>", wish);
+  console.log("req.file>>", req.file);
+
+  if (req.file) {
+    const url = req.protocol + "://" + req.get("host");
+    wish.image = url + "/images/" + req.file.filename;
+  }
+
   wish.save().then(createdWish => {
-    console.log(createdWish);
+    // console.log(createdWish);
     res.status(201).json({
       message: "Created successfully",
       wish: {

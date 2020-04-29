@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const wishController = require('../controllers/wish-controller');
+const extractFile = require('../middleware/file');
 
 // Create a Wish
-router.post('/add', wishController.addWish);
+router.post('/add', extractFile, wishController.addWish);
 
 // Get Wish 
 router.post('/get', wishController.getWish);

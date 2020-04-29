@@ -1,19 +1,22 @@
 import React, { Component } from 'react'
 
 import Card from '@material-ui/core/Card';
-
 import { Link } from 'react-router-dom'
-
 import validator from 'validator';
 
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 
+import jwtDecode from 'jwt-decode'
+import { connect } from 'react-redux';
+import { userData } from './../../../redux-store/actions/ActionUserData'
+import { LocalStorage } from '../../helper/LocalStorage';
+
 import MyTextField from '../../helper/MyTextField'
 import MySelection from '../../helper/MySelection'
 import ApiManager from '../../helper/ApiManager'
 
-export default class Login extends Component {
+class Login extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -24,7 +27,8 @@ export default class Login extends Component {
 
             successMsg: "",
             isLoading: false,
-            disableBtn: false
+            disableBtn: false,
+            errorMessage: ""
 
         }
     }
@@ -84,14 +88,14 @@ export default class Login extends Component {
 
                     <Button style={{}}
                         variant="contained"
-                        class="btn btn-primary"
+                        className="btn btn-primary"
                         onClick={() => {
                             this.loginFunction()
                         }}
                         disabled={this.state.disableBtn}>
                         {
                             this.state.disableBtn ?
-                                <span class="spinner-border spinner-border-sm"></span>
+                                <span className="spinner-border spinner-border-sm"></span>
                                 :
                                 undefined
                         }
@@ -106,6 +110,9 @@ export default class Login extends Component {
                             color: 'blue',
                         }}
                     >Signup</Link>
+                    <br />
+                    <div style={{ color: "red", padding: "10px" }}>{this.state.errorMessage}</div>
+
                 </Card>
                 <br />
             </div>
@@ -181,14 +188,42 @@ export default class Login extends Component {
                     })
                     return
                 }
+
+
+
+
+                if (result.data) {
+                    const { token } = result.data;
+                    var decoded = jwtDecode(token);
+                    new LocalStorage().setUserData(JSON.stringify(decoded))
+                    new LocalStorage().setUserJwt(token);
+                    this.props.userData(decoded, token)
+                }
+
+                this.props.history.push('/wishes');
+                this.setState({
+                    isLoading: false,
+                    disableBtn: false
+                })
+                console.log("result after adding>>>", result);
+
             }
-            this.props.history.push('/wishes');
-            this.setState({
-                isLoading: false,
-                disableBtn: false
-            })
-            console.log("result after adding>>>", result);
+ 
+
         })
 
     }
 }
+
+
+const mapStateToProps = (state, own_props) => {
+    return {
+        state
+    }
+}
+
+const actions = {
+    userData
+}
+
+export default connect(mapStateToProps, actions)(Login)

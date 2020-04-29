@@ -3,6 +3,7 @@ import Card from '@material-ui/core/Card';
 
 import validator from 'validator';
 
+
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 
@@ -151,11 +152,6 @@ export default class Main extends Component {
     addWish = () => {
         const { title, title_error, description, description_error, image, image_error } = this.state
 
-
-        const formData = new FormData();
-        formData.append("dataFile", image, image.name);
-    
-
         if (validator.isEmpty(title + "")) {
             this.setState({
                 title_error: "Please enter Title"
@@ -194,7 +190,7 @@ export default class Main extends Component {
         new ApiManager().addWish(
             title,
             description,
-            formData
+            image
         ).then(result => {
             this.setState({
                 isLoading: true,

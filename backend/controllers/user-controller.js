@@ -10,15 +10,13 @@ exports.signUp = (req, res, next) => {
         // console.log("dataaaa", req.body)
         const user = new User({
             name: req.body.name,
+            phone: req.body.phone,
             email: req.body.email,
             password: hash,
-            dateofbirth: req.body.dateofbirth,
-            phone: req.body.phone,
+            dob: req.body.dob,
             education: req.body.education,
+            job: req.body.job,
             address: req.body.address,
-            currentAddress: req.body.currentAddress,
-            userViews: req.body.userViews,
-            userJob: req.body.userJob,
             profileImage: req.body.profileImage,
             joinDate: date,
         });
@@ -65,7 +63,7 @@ exports.login = (req, res, next) => {
             );
             res.status(200).json({
                 token: token,
-                expiresIn: 36000,
+                expiresIn: 360000,
                 userId: fetchedUser._id,
                 name: fetchedUser.name,
                 email: fetchedUser.email
@@ -74,6 +72,56 @@ exports.login = (req, res, next) => {
         .catch(err => {
             return res.status(401).json({
                 message: "Invalid authentication credentials!"
+            });
+        });
+}
+
+
+
+// // Get User By Id
+
+exports.getUserById = (req, res, next) => {
+    User.findById(req.body.id, { "password": 0 }).then(user => {
+        if (!user)
+            return res.status(404).json({ status: false, message: 'User record not found.' });
+        else
+            // console.log(user);
+            return res.status(200).json(user);
+    });
+}
+
+
+
+//   // Update User Profile
+exports.userUpdate = (req, res, next) => {
+    // console.log(req.body)
+
+    const user = new User({
+        _id: req.body.id,
+        name: req.body.name,
+        phone: req.body.phone,
+        dob: req.body.dob,
+        education: req.body.education,
+        job: req.body.job,
+        address: req.body.address,
+    });
+     console.log(req.file);
+    if (req.file) {
+        const url = req.protocol + "://" + req.get("host");
+        user.image = url + "/images/" + req.file.filename;
+    }
+    User.updateOne({ _id: req.body.id }, user)
+        .then(result => {
+            if (result.nModified > 0) {
+                res.status(200).json({ message: "Update successful!" });
+            } else {
+                res.status(401).json({ message: "Not authorized!" });
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            return res.status(401).json({
+                message: "No updated!"
             });
         });
 }
@@ -97,18 +145,7 @@ exports.login = (req, res, next) => {
 
 
 
-// // Get User By Id
-// exports.getUserProfileById = (req, res, next) => {
-//     User.findById(req.params.id).then(user => {
-//       if (!user)
-//         return res.status(404).json({ status: false, message: 'User record not found.' });
-//       else
-//         // console.log(user);
-//         return res.status(200).json(user);
-//     });
-//   }
-  
-//   // Get users 
+  // Get users 
 //   exports.getUsersProfile = (req, res, next) => {
 //     User.find().then(documents => {
 //       // console.log(documents);
@@ -123,38 +160,8 @@ exports.login = (req, res, next) => {
 //         });
 //       });
 //   }
-  
-//   // Update User Profile
-//   exports.updateUserProfile = (req, res, next) => {
-//     const user = new User({
-//       _id: req.body.id,
-//       phone: req.body.phone,
-//       education: req.body.education,
-//       field: req.body.field,
-//       experiance: req.body.experiance,
-//       work: req.body.work,
-//       address: req.body.address,
-//       currentAddress: req.body.currentAddress,
-//       profileImage: req.body.profileImage,
-//       userScore: req.body.userScore
-//     });
-//     //  console.log(user);
-//     if (req.file) {
-//       const url = req.protocol + "://" + req.get("host");
-//       user.profileImage = url + "/images/profile/" + req.file.filename;
-//     }
-//     //  console.log(user);
-//     User.updateOne({ _id: req.params.id }, user)
-//       .then(result => {
-//         // console.log(result);
-//         if (result.nModified > 0) {
-//           res.status(200).json({ message: "Update successful!" });
-//         } else {
-//           res.status(401).json({ message: "Not authorized!" });
-//         }
-//       });
-//   }
-  
+
+
 //   // Update User Profile Views
 //   exports.updateUserProfileViews = (req, res, next) => {
 //     const user = new User({
@@ -169,7 +176,7 @@ exports.login = (req, res, next) => {
 //         }
 //       });
 //   }
-  
+
 //   // Update User Score
 //   exports.updateUserScore = (req, res, next) => {
 //     const user = new User({
@@ -185,4 +192,3 @@ exports.login = (req, res, next) => {
 //         }
 //       });
 //   }
-  

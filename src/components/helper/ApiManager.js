@@ -1,6 +1,16 @@
 import axios from 'axios';
+import { LocalStorage } from './LocalStorage'
+
+
+let user = new LocalStorage().getUserData();
+user = JSON.parse(user);
 
 export default class ApiManager {
+
+
+    userId = user.userId
+    userName = user.name
+
 
     // LocalHost
     _BASE_URL = "http://localhost:4000/api/"
@@ -11,6 +21,8 @@ export default class ApiManager {
     _USER_LOGIN = "user/login"
     _USER_SIGNUP = "user/signup"
     _USER_UPDATE = "user/update"
+    _USER_GET_BY_ID = "user/get"
+
     // WISH
     _ADD_WISH = "wish/add"
     _GET_WISH_LIST = "wish/get"
@@ -101,6 +113,11 @@ export default class ApiManager {
         let userData = {
             name: _name,
             email: _email,
+            phone: 'none',
+            dob: 'none',
+            education: 'none',
+            job: 'none',
+            address: 'none',
             password: _password
         }
         console.log("data for adding>>>>>", userData)
@@ -120,11 +137,57 @@ export default class ApiManager {
         return this.sendPostRequest(url, userData, this.headers)
     }
 
-    //User Update
+    //User by ID
+    userById(id) {
+        let url = this._USER_GET_BY_ID;
+        let userId = { id: id }
+        // console.log("getting user by id>>>>", id)
+        return this.sendPostRequest(url, userId, this.headers)
+    }
+
+    //user update
+    updateUser(
+        _id,
+        _name,
+        _phone,
+        _dob,
+        _education,
+        _job,
+        _address,
+        _image
+    ) {
+        let url = this._USER_UPDATE;
+        if (_image) {
+            const formData = new FormData();
+            formData.append("id", _id)
+            formData.append("name", _name)
+            formData.append("phone", _phone)
+            formData.append("dob", _dob)
+            formData.append("education", _education)
+            formData.append("job", _job)
+            formData.append("address", _address)
+            formData.append("image", _image);
+            console.log("formDataformData>>>>>", formData)
+            return this.sendPostRequest(url, formData, this.headers)
+        } else {
+            let userData = {
+                id: _id,
+                name: _name,
+                phone: _phone,
+                dob: _dob,
+                education: _education,
+                job: _job,
+                address: _address,
+            }
+            return this.sendPostRequest(url, userData, this.headers)
+        }
+
+    }
 
 
 
     // WISH FUNCTIONS
+
     //Adding WISH
     addWish(
         _title,
@@ -132,13 +195,26 @@ export default class ApiManager {
         _image,
     ) {
         let url = this._ADD_WISH;
-        let wishData = {
-            title: _title,
-            description: _description,
-            image: _image
+        if (_image) {
+
+            const formData = new FormData();
+            formData.append("title", _title)
+            formData.append("description", _description)
+            formData.append("image", _image);
+            formData.append("userId", this.userId);
+            formData.append("userName", this.userName);
+            console.log("formDataformData>>>>>", formData)
+            return this.sendPostRequest(url, formData, this.headers)
+        } else {
+            let wishData = {
+                title: _title,
+                description: _description,
+                userId: this.userId,
+                userName: this.userName
+            }
+            console.log("without image data>>>>>", wishData)
+            return this.sendPostRequest(url, wishData, this.headers)
         }
-        console.log("data for adding>>>>>", wishData)
-        return this.sendPostRequest(url, wishData, this.headers)
     }
 
     // Get WISH List

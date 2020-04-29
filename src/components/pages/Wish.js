@@ -5,7 +5,6 @@ import ReactPlayer from 'react-player'
 
 import ApiManager from '../helper/ApiManager'
 
-
 export default class Wish extends Component {
     constructor(props) {
         super(props)
@@ -40,8 +39,8 @@ export default class Wish extends Component {
         const { wishData } = this.state;
         return (
             <div className="container">
-                <Card style={{ textAlign: 'left', padding: '30px', marginTop: '20px', marginBottom: '150px' }}>
-                    <h4 style={{ marginLeft: '48%' }}>Post</h4>
+                <Card style={{ textAlign: 'left', padding: '70px', marginTop: '40px', marginBottom: '150px' }}>
+                    <h4 style={{ marginLeft: '48%' }}>Wish</h4>
                     <br />
                     Title:<div style={{ padding: '10px', background: '#eee', borderRadius: '5px' }}>
                         <h5>  {wishData.title}</h5>
@@ -57,22 +56,17 @@ export default class Wish extends Component {
                     <br />
 
                     {
-                        wishData.videoLink ?
+                        wishData.image ?
                             <div>
-                                Video is Attached
-                                <div className='player-wrapper'>
-                                    <ReactPlayer
-                                        className='react-player'
-                                        url={wishData.videoLink}
-                                        width='100%'
-                                        height="450px"
-                                        controls="true"
-                                    />
+                                Attached image
+                                <div>
+                                    <img src={wishData.image} alt="img" height="100" width="100" />
                                 </div>
                             </div>
                             :
                             undefined
                     }
+                    <h6>By: {wishData.userName}</h6>
                     <br />
                     <button
                         style={{ float: 'right' }}

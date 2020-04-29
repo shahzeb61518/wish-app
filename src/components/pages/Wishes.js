@@ -7,13 +7,15 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 
+import { connect } from 'react-redux';
+
 import ApiManager from '../helper/ApiManager'
 import Spinner from '../helper/Spinner'
 
 import { Link } from 'react-router-dom'
 import Button from '@material-ui/core/Button';
 
-export default class Wishes extends Component {
+class Wishes extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -80,6 +82,13 @@ export default class Wishes extends Component {
                                                 >
                                                     Title: {item.title}
                                                 </Typography>
+
+                                                {
+                                                    item.userName ?
+                                                        <div>By: {item.userName}</div>
+                                                        :
+                                                        undefined
+                                                }
                                                 {
                                                     item.image ?
                                                         <div>Image is Attached</div>
@@ -205,3 +214,15 @@ export default class Wishes extends Component {
 
 
 }
+
+
+
+const mapStateToProps = (state) => {
+    return state
+}
+
+const actions = {
+
+}
+
+export default connect(mapStateToProps, actions)(Wishes)
